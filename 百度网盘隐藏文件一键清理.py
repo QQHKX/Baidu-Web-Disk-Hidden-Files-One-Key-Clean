@@ -1,22 +1,4 @@
-import subprocess
 import sys
-
-# 定义需要安装的库
-required_packages = ['pywin32', 'tqdm']
-
-# 检查并安装缺失的库
-def install_packages(packages):
-    for package in packages:
-        try:
-            __import__(package)  # 尝试导入库
-        except ImportError:
-            print(f"未安装 {package}，正在安装...")
-            subprocess.check_call([sys.executable, '-m', 'pip', 'install', package])
-
-# 调用函数安装所需库
-install_packages(required_packages)
-
-# 继续执行后续代码
 import os
 import win32file
 from tqdm import tqdm
