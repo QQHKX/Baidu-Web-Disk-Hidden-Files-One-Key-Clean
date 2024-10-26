@@ -15,7 +15,7 @@ def spinning_animation(stop_event):
     spinner = ['|', '/', '-', '\\']
     while not stop_event.is_set():
         for symbol in spinner:
-            sys.stdout.write(f'\r{symbol} 正在处理中...')
+            sys.stdout.write(f'\r{symbol} 正在索引中...')
             sys.stdout.flush()
             time.sleep(0.1)
 
@@ -39,14 +39,12 @@ def confirm_and_delete_files(directory, search_str):
 
     # 用于统计文件总数，以便初始化进度条的总长度
     total_files = sum([len(files) for _, _, files in os.walk(directory)])
-    print(f"当前目录存在: {total_files}个文件")
+    
 
     # 处理完毕，停止动画
     stop_event.set()
     animation_thread.join()  # 等待动画线程结束
-
-    # 初始化进度条
-    print("正在扫描文件...")
+    print(f"已索引: {total_files}个文件")
     with tqdm(total=total_files, desc="遍历文件", unit="file") as pbar:
         for root, _, files in os.walk(directory):
             for file in files:
@@ -94,18 +92,21 @@ def confirm_and_delete_files(directory, search_str):
 if __name__ == "__main__":
     print("欢迎使用百度网盘自动备份修复工具！")
 
-    search_str = input("请输入要删除的文件名中包含的字符串(默认为.baiduyun.uploading.cfg)：").strip()
+    search_str = input("请输入要扫描的文件名中包含的字符串(默认为.baiduyun.uploading.cfg)：").strip()
     if not search_str:
         search_str = '.baiduyun.uploading.cfg'
 
-    directory = input("请输入要删除的文件所在的目录(默认为你的桌面)：").strip()
+    directory = input("请输入要扫描的文件所在的目录(默认为系统盘)：").strip()
     if not directory:
-        directory = os.path.expanduser('~/Desktop')
+        directory = os.path.abspath(os.sep)
+        
 
 
     # 让用户确认
-    confirmation = input(f"你是否删除【{directory}】中所有文件名包含【{search_str}】字段的文件？(y/n):").strip().lower()
+    confirmation = input(f"你是否扫描【{directory}】中所有文件名包含【{search_str}】字段的文件？(y/n):").strip().lower()
     if confirmation == 'y':
         confirm_and_delete_files(directory, search_str)
     else:
         print("已取消操作。")
+
+    input("按任意键退出...") 
