@@ -71,7 +71,7 @@ def confirm_and_delete_files(directory, search_str):
     print(f"{RED}警告！{YELLOW}你正在删除【{directory}】中所有文件名包含【{search_str}】字段的文件！{RESET}")
 
     #请冷静5秒,请仔细检查这些文件，确保它们不是你需要的文件。
-    for i in range(5, 0, -1):
+    for i in range(10, 0, -1):
         print(f"请再冷静{YELLOW}{i}{RESET}秒,请仔细检查这些文件，确保它们不是你需要的文件。")
         time.sleep(1)
 
